@@ -1,4 +1,4 @@
-lmSetup <- function(data, response = "", lmPerCycle = 500 ){
+lmSetup <- function(data, response = "", lmPerCycle = 100, dataPercent = 1/3){
   lmPerCycle <- as.integer(lmPerCycle)
   lmChecks(data, response, lmPerCycle)
 
@@ -20,19 +20,27 @@ lmSetup <- function(data, response = "", lmPerCycle = 500 ){
       # Sample j predictor variables randomly
       predictors <- sample(setdiff(names(data), response), j)
 
+      #bootstrap the data
+      numRows <- nrow(data) * dataPercent
+      subset_indices <- sample(1:nrow(data), size = numRows, replace = TRUE)
+      bootstrap <- data[subset_indices, ]
+
       # Fit a linear model
-      lm_model <- lm(data[[response]] ~ ., data = data[, c(predictors, response), drop = FALSE])
+      lm_model <- lm(bootstrap[[response]] ~ ., data = bootstrap[, c(predictors), drop = FALSE])
 
       # Extract coefficients
-      coefficients_list[[i]] <- coef(lm_model)
+      coefs <- coef(lm_model)
+      coefs <- coefs[!sapply(coefs, is.na)]
+      coefficients_list[[i]] <- coefs
     }
 
     # Add the coefficients to the Big List
+
     bigList[[j-1]] <- coefficients_list
 
     iteration_end <- Sys.time() # Capture end time of the iteration
     iteration_time <- round((iteration_end - iteration_start) * 1000) # Calculate duration
-
+    gc()
     print(paste("Round", j-1, "/", ncol(data)-3, "took", iteration_time, "milliseconds."))
   }
   return(bigList)

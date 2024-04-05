@@ -13,6 +13,8 @@ ensemble_accuracy <- function(modelList, testData, response){
   mean(sapply(modelList, function(elem) single_accuracy(elem, datatest, response)))
 }
 
+ensemble_accuracy(dataList[[1]], datatest, "VETH")
+
 vote_caster <- function(modelList, testData, response){
   iteration_start <- Sys.time()
   coefficients_list <- list()
@@ -52,6 +54,8 @@ vote_all <- function(bigdata, testData, response){
   }
   voteout
 }
+
+vote_all(dataList, datatest, "VETH")
 
 sum_caster <- function(modelList, testData, response){
   iteration_start <- Sys.time()

@@ -9,4 +9,15 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Includes: 
+Includes: Rcpp,
+  parallel,
+  doParallel,
+  foreach
+LinkingTo: Rcpp
+Imports: Rcpp,
+  parallel,
+  doParallel,
+  foreach
+Depends: Rcpp,
+        doParallel
+RoxygenNote: 7.3.1

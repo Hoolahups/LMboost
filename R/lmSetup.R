@@ -16,7 +16,7 @@ lmSetup <- function(data, response = "", lmPerCycle = 100, dataPercent = 1/3){
     coefficients_list <- list()
 
     # Loop through each model
-    for (i in 1:lmPerCycle) {
+    coefficients_list <- foreach(i = 1:lmPerCycle) %dopar% {
       # Sample j predictor variables randomly
       predictors <- sample(setdiff(names(data), response), j)
 
@@ -31,7 +31,7 @@ lmSetup <- function(data, response = "", lmPerCycle = 100, dataPercent = 1/3){
       # Extract coefficients
       coefs <- coef(lm_model)
       coefs <- coefs[!sapply(coefs, is.na)]
-      coefficients_list[[i]] <- coefs
+      return(coefs)
     }
 
     # Add the coefficients to the Big List
@@ -41,8 +41,9 @@ lmSetup <- function(data, response = "", lmPerCycle = 100, dataPercent = 1/3){
     iteration_end <- Sys.time() # Capture end time of the iteration
     iteration_time <- round((iteration_end - iteration_start) * 1000) # Calculate duration
     gc()
-    print(paste("Round", j-1, "/", ncol(data)-3, "took", iteration_time, "milliseconds."))
+    print(paste("LM Generation Round", j-1, "/", ncol(data)-3, "took", iteration_time, "milliseconds."))
   }
+  bigList <- setNames(bigList, seq_along(bigList))
   return(bigList)
 }
 

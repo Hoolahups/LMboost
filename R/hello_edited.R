@@ -5,7 +5,7 @@ data <- subset(data, select = -c(LABEGRD_ID, aspd, UTMX, UTMY))
 #prepping mullein data
 data_dataList <- lmSetup(data, response = "VETH", dataPercent = 1)
 data_coefs <- coef(lm(VETH ~ ., data = data))
-data_coefs <- data_coefs[!sapply(coefs, is.na)]
+data_coefs <- data_coefs[!sapply(data_coefs, is.na)]
 single_accuracy(data_coefs, data, "VETH")
 
 #same thing here for mullein test data
@@ -13,7 +13,7 @@ datatest <- read.csv("newvalid.csv")
 datatest <- subset(datatest, select = -c(LABEGRD_ID, aspd, UTMX, UTMY))
 test_dataList <- lmSetup(datatest, response = "VETH", dataPercent = 1)
 test_coefs <- coef(lm(VETH ~ ., data = datatest))
-test_coefs <- test_coefs[!sapply(coefs, is.na)]
+test_coefs <- test_coefs[!sapply(test_coefs, is.na)]
 single_accuracy(test_coefs, datatest, "VETH")
 
 #no major edits made here

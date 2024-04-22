@@ -1,3 +1,3 @@
 parallelsetup<- function(){
-  registerDoParallel(cores = (detectCores()-1))
+  registerDoParallel(cores = (detectCores()-5))
 }

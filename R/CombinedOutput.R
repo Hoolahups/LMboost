@@ -1,6 +1,5 @@
 combined_output <- function(data, datatest, response){
   truestart <- Sys.time()
-  parallelsetup()
   totalOutput <- list()
   lms <- c(5,25,50,75,100,150,200)
   for(i in 1:length(lms)){
@@ -19,3 +18,4 @@ combined_output <- function(data, datatest, response){
   totalOutput
 }
 
+saveRDS(LMboost:::combined_output(data, datatest, response), file = "LAQI.rds")
